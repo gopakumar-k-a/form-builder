@@ -1,0 +1,52 @@
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+
+const RightSidebar = ({ isOpen, toggleSidebar, setRightSideBarOpen }) => {
+  const { selectedComponent } = useSelector((state) => state.canvas);
+  useEffect(() => {
+    if (selectedComponent) {
+      console.log("selected  component ", selectedComponent);
+
+      setRightSideBarOpen(true); // Open sidebar when a component is selected
+    }
+  }, [selectedComponent, setRightSideBarOpen]);
+  return (
+    <div
+      className={`fixed top-0 right-0 h-full w-64 bg-gray-900 text-white p-4 transition-transform transform ${
+        isOpen ? "translate-x-0" : "translate-x-full"
+      }`}
+    >
+      <button
+        onClick={toggleSidebar}
+        className="absolute top-4 left-4 text-white text-xl"
+      >
+        &times;
+      </button>
+      <h2 className="text-xl font-bold mb-4">Right Sidebar</h2>
+      {selectedComponent ? (
+        <div>
+          <p className="text-sm text-gray-300">
+            Editing: {selectedComponent.name}
+          </p>
+          <label className="block mt-4">
+            Placeholder:
+            <input
+              type="text"
+              defaultValue={selectedComponent.attributes?.placeholder}
+              className="w-full p-2 bg-gray-800 border border-gray-600 rounded mt-1"
+            />
+          </label>
+          {/* Add more fields as needed */}
+        </div>
+      ) : (
+        <p className="text-sm text-gray-400">Select a component to edit.</p>
+      )}
+      {/* <ul>
+        <li className="p-2 hover:bg-gray-700 cursor-pointer">Item 1</li>
+        <li className="p-2 hover:bg-gray-700 cursor-pointer">Item 2</li>
+        <li className="p-2 hover:bg-gray-700 cursor-pointer">Item 3</li>
+      </ul> */}
+    </div>
+  );
+};
+export default RightSidebar;

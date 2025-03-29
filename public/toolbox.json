@@ -1,0 +1,76 @@
+[
+  {
+    "id": "tbx-1",
+    "type": "textbox",
+    "name": "Text Box",
+    "icon": "📝",
+    "attributes": {
+      "placeholder": "Enter text",
+      "required": true
+    },
+    "tailwind": {
+      "base": "w-full px-4 py-2 border rounded-md",
+      "border": "border-gray-300",
+      "text": "text-gray-900",
+      "bg": "bg-white",
+      "focus": "focus:ring focus:ring-blue-500"
+    }
+  },
+  {
+    "id": "tbx-2",
+    "type": "dropdown",
+    "name": "Dropdown",
+    "icon": "📜",
+    "options": ["Option 1", "Option 2", "Option 3"],
+    "tailwind": {
+      "base": "w-full px-4 py-2 border rounded-md",
+      "border": "border-gray-300",
+      "text": "text-gray-900",
+      "bg": "bg-white",
+      "focus": "focus:ring focus:ring-blue-500"
+    }
+  },
+  {
+    "id": "tbx-3",
+    "type": "date",
+    "name": "Date Picker",
+    "icon": "📅",
+    "tailwind": {
+      "base": "w-full px-4 py-2 border rounded-md",
+      "border": "border-gray-300",
+      "text": "text-gray-900",
+      "bg": "bg-white",
+      "focus": "focus:ring focus:ring-blue-500"
+    }
+  },
+  {
+    "id": "tbx-4",
+    "type": "checkbox",
+    "name": "Checkbox",
+    "icon": "☑️",
+    "attributes": {
+      "checked": false
+    },
+    "tailwind": {
+      "base": "h-5 w-5 rounded",
+      "border": "border-gray-300",
+      "text": "text-blue-600",
+      "bg": "bg-white",
+      "focus": "focus:ring focus:ring-blue-500"
+    }
+  },
+  {
+    "id": "tbx-5",
+    "type": "radio",
+    "name": "Radio Button",
+    "icon": "🔘",
+    "options": ["Option A", "Option B"],
+    "tailwind": {
+      "base": "h-5 w-5 rounded-full",
+      "border": "border-gray-300",
+      "text": "text-blue-600",
+      "bg": "bg-white",
+      "focus": "focus:ring focus:ring-blue-500"
+    }
+  }
+]
