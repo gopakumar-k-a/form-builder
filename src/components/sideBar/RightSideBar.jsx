@@ -26,7 +26,7 @@ const RightSidebar = ({ isOpen, toggleSidebar, setRightSideBarOpen }) => {
       {selectedComponent ? (
         <div>
           <p className="text-sm text-gray-300">
-            Editing: {selectedComponent.name}
+            Editing: {selectedComponent.extraAttributes.label}
           </p>
           <label className="block mt-4">
             Placeholder:

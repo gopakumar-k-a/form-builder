@@ -10,25 +10,84 @@ const canvasSlice = createSlice({
   initialState,
   reducers: {
     setComponents: (state, action) => {
-      const { item, operation } = action.payload;
+      const { item, operation, index, fromIndex, toIndex } = action.payload;
       switch (operation) {
         case "add": {
-          const uniqueInstanceId = `${item.id}-${Date.now()}`;
-          state.components = [
-            ...state.components,
-            { ...item, id: uniqueInstanceId },
-          ];
-          break;
-        }
+          const newComponents = [...state.components];
 
+          if (index !== null && index >= 0 && index < newComponents.length) {
+            // Insert at a specific index
+            newComponents.splice(index, 0, item);
+          } else {
+            // Add at the end by default
+            newComponents.push(item);
+          }
+
+          return {
+            ...state,
+            components: newComponents,
+            selectedComponent: item,
+          };
+
+          // const uniqueInstanceId = `${item.id}-${Date.now()}`;
+          // const newComponent = { ...item, id: uniqueInstanceId };
+          // return {
+          //   ...state,
+          //   components: [...state.components, item],
+          //   selectedComponent: item,
+          // };
+        }
+        // switch (operation) {
+        //   case "add": {
+        //     const uniqueInstanceId = `${item.id}-${Date.now()}`;
+        //     const newComponent = { ...item, id: uniqueInstanceId };
+        //     return {
+        //       ...state,
+        //       components: [...state.components, newComponent],
+        //       selectedComponent: newComponent,
+        //     };
+        //   }
         case "remove": {
-          state.components = state.components.filter(
+          const newComponents = state.components.filter(
             (comp) => comp.id !== item.id
           );
-          if (state.selectedComponent.id == item.id) {
-            state.selectedComponent = null;
-          }
-          break;
+          return {
+            ...state,
+            components: newComponents,
+            selectedComponent: null,
+          };
+        }
+        case "swap": {
+          console.log("fromIndex === toIndex ", fromIndex, " === ", toIndex);
+          if (fromIndex === toIndex) return state; // No need to swap
+
+          if (
+            fromIndex < 0 ||
+            toIndex < 0 ||
+            fromIndex >= state.components.length ||
+            toIndex >= state.components.length
+          )
+            return state;
+
+          const newComponents = [...state.components];
+          // Swap elements
+          [newComponents[fromIndex], newComponents[toIndex]] = [
+            newComponents[toIndex],
+            newComponents[fromIndex],
+          ];
+          // let selectedComponent = state.selectedComponent;
+
+          // if (state.selectedComponent === state.components[fromIndex]) {
+          //   selectedComponent = newComponents[toIndex];
+          // } else if (state.selectedComponent === state.components[toIndex]) {
+          //   selectedComponent = newComponents[fromIndex];
+          // }
+          const selectedComponent = newComponents[toIndex];
+          return {
+            ...state,
+            components: newComponents,
+            selectedComponent,
+          };
         }
 
         default:
@@ -39,7 +98,7 @@ const canvasSlice = createSlice({
       const { item, operation } = action.payload;
       switch (operation) {
         case "add": {
-          state.selectedComponent = {...item};
+          state.selectedComponent = { ...item };
           break;
         }
         case "remove": {

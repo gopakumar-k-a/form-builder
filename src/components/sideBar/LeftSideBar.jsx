@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import DragableInput from "../DragableInput/DragableInput";
+import { TextFieldFormElement } from "../DragableElementConfig/TextField";
+const LeftSidebar = ({ isOpen, toggleSidebar }) => {
+  // const [elements, setElements] = useState([]);
 
-const LeftSidebar = ({ isOpen, toggleSidebar}) => {
-  const [elements, setElements] = useState([]);
-
-  useEffect(() => {
-    fetch("/toolbox.json")
-      .then((res) => res.json())
-      .then((data) => setElements(data))
-      .catch((err) => console.error("Error loading toolbox data:", err));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/toolbox.json")
+  //     .then((res) => res.json())
+  //     .then((data) => setElements(data))
+  //     .catch((err) => console.error("Error loading toolbox data:", err));
+  // }, []);
 
   return (
     <div
@@ -24,8 +24,10 @@ const LeftSidebar = ({ isOpen, toggleSidebar}) => {
         &times;
       </button>
       <h2 className="text-xl font-bold mb-4">Add Inputs</h2>
-      {elements?.length &&
-        elements.map((el) => <DragableInput el={el} key={el.id} />)}
+      <DragableInput el={TextFieldFormElement} />
+
+      {/* {elements?.length &&
+        elements.map((el) => <DragableInput el={el} key={el.id} />)} */}
     </div>
   );
 };
