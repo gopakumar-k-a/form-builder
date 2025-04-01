@@ -1,6 +1,6 @@
 import React from "react";
 import DragableInput from "../DragableInput/DragableInput";
-import { TextFieldFormElement } from "../DragableElementConfig/TextField";
+import { TextFieldFormElement } from "../DragableElementConfig/TextFieldFormElement";
 const LeftSidebar = ({ isOpen, toggleSidebar }) => {
   // const [elements, setElements] = useState([]);
 

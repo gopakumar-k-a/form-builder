@@ -10,7 +10,7 @@ const canvasSlice = createSlice({
   initialState,
   reducers: {
     setComponents: (state, action) => {
-      const { item, operation, index, fromIndex, toIndex } = action.payload;
+      const { item, operation, index } = action.payload;
       switch (operation) {
         case "add": {
           const newComponents = [...state.components];
@@ -58,6 +58,7 @@ const canvasSlice = createSlice({
           };
         }
         case "swap": {
+          const { fromIndex, toIndex } = action.payload;
           console.log("fromIndex === toIndex ", fromIndex, " === ", toIndex);
           if (fromIndex === toIndex) return state; // No need to swap
 
@@ -89,6 +90,34 @@ const canvasSlice = createSlice({
             selectedComponent,
           };
         }
+        case "update": {
+          const { updatedComponent } = action.payload; // Extract id and updatedComponent
+        
+          const componentIndex = state.components.findIndex((comp) => comp.id === updatedComponent.id);
+        
+          if (componentIndex === -1) return state; // If component with the given id is not found, return the state unchanged
+        
+          // Merge the existing component with the updated values, including type
+          const updatedComponentData = { ...state.components[componentIndex], ...updatedComponent };
+        console.log('updatedComponentData ',updatedComponentData);
+        
+          // Create a new components array with the updated component
+          const newComponents = [
+            ...state.components.slice(0, componentIndex),
+            updatedComponentData,
+            ...state.components.slice(componentIndex + 1),
+          ];
+        
+          const selectedComponent = updatedComponentData; // Optionally update the selected component
+        
+          return {
+            ...state,
+            components: newComponents,
+            selectedComponent,  // Optionally update the selected component
+          };
+        }
+        
+        
 
         default:
           return state;

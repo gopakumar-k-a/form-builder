@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import {DesignerComponent} from "../DragableElementConfig/TextField";
+import {DesignerComponent} from "../DragableElementConfig/TextFieldFormElement";
 
 function DraggableComponent({
   component,

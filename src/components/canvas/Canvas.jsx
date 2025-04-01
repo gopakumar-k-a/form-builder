@@ -1,22 +1,24 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  setComponents,
-  setSelectedComponent,
-} from "../../redux/reducers/canvas/canvasReducer";
+
+// import {
+//   setComponents,
+//   setSelectedComponent,
+// } from "../../redux/reducers/canvas/canvasReducer";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import RenderComponent from "../renderInput/RenderInput";
-import { DesignerComponent } from "../DragableElementConfig/TextField";
+// import RenderComponent from "../renderInput/RenderInput";
+// import { DesignerComponent } from "../DragableElementConfig/TextFieldFormElement";
+import { formElements } from "../DragableElementConfig/FormElements";
 import { uniqueIdGenerator } from "../../lib/uniqueIdGenerator";
 import DraggableComponent from "./DraggableComponent";
 import CanvasHeader from "./CanvasHeader";
-
+import useCanvas from "../../hooks/useCanvas";
 const Canvas = () => {
-  const dispatch = useDispatch();
-  const { components, selectedComponent } = useSelector(
-    (state) => state.canvas
-  );
+  // const dispatch = useDispatch();
+  // const { components, selectedComponent } = useSelector(
+  //   (state) => state.canvas
+  // );
+  const { components, selectedComponent,setComponents,setSelectedComponent}=useCanvas()
   const debounceTimeout = useRef(null);
   // const [showButtons, setShowButtons] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -38,7 +40,7 @@ const Canvas = () => {
     clearTimeout(debounceTimeout.current);
     setHoveredIndex(index);
   };
-  
+
   const handleMouseLeave = () => {
     clearTimeout(debounceTimeout.current);
     debounceTimeout.current = setTimeout(() => {
@@ -50,25 +52,29 @@ const Canvas = () => {
     const newElement = item.construct(uniqueIdGenerator());
     console.log("new element ", newElement);
 
-    dispatch(
+    // dispatch(
       setComponents({
         operation: "add",
         item: newElement,
         index, // Pass index for positioning
       })
-    );
-    handleMouseLeave()
+    // );
+    handleMouseLeave();
   };
 
   const handleSelectComponent = (component) => {
-    dispatch(
+    // dispatch(
       setSelectedComponent({ operation: "add", item: { ...component } })
-    );
+    // );
   };
 
   const handleDeleteComponent = (component) => {
-    dispatch(setComponents({ operation: "remove", item: component }));
-    handleMouseLeave()
+    // dispatch(
+      
+      setComponents({ operation: "remove", item: component })
+    
+    // );
+    handleMouseLeave();
   };
   const moveItem = useCallback((fromIndex, toIndex) => {
     if (fromIndex === toIndex) return;
@@ -81,8 +87,12 @@ const Canvas = () => {
     //   updatedComponents.splice(fromIndex, 1)[0]
     // );
 
-    dispatch(setComponents({ operation: "swap", fromIndex, toIndex }));
-    handleMouseLeave()
+    // dispatch(
+      
+      setComponents({ operation: "swap", fromIndex, toIndex })
+    
+    // );
+    handleMouseLeave();
   }, []);
 
   return (
@@ -138,7 +148,8 @@ const Canvas = () => {
               {/* </div> */}
               <div
                 className={`absolute top-1 right-1 flex gap-2 ${
-                  selectedComponent?.id === component.id ||  hoveredIndex === index
+                  selectedComponent?.id === component.id ||
+                  hoveredIndex === index
                     ? ""
                     : "hidden"
                 }`}
@@ -181,6 +192,10 @@ function DesignerElementWrapper({
   // onMouseEnter,
   // onMouseLeave,
 }) {
+  // const { DesignerComponent } = formElements[el.type];
+  const DesignerComponent = formElements[el.type].designerComponent();
+
+
   const ITEM_TYPE = "CANVAS_ITEM";
   const [{ isDragging }, ref] = useDrag({
     type: ITEM_TYPE,
@@ -217,7 +232,7 @@ function DesignerElementWrapper({
       {/* <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}> */}
       <DesignerComponent
         innerRef={(node) => ref(drop(node))}
-        element={el}
+        elementInstance={el}
         className={computedClass}
       />
       {/* </div> */}

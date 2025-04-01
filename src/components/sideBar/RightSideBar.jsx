@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-
+// import { useSelector } from "react-redux";
+import PropertyForms from "../forms/PropertyForms";
+// import { RxCross2 } from "react-icons/rx";
+import useCanvas from "../../hooks/useCanvas";
 const RightSidebar = ({ isOpen, toggleSidebar, setRightSideBarOpen }) => {
-  const { selectedComponent } = useSelector((state) => state.canvas);
+  const {selectedComponent}=useCanvas()
+  // const { selectedComponent } = useSelector((state) => state.canvas);
   useEffect(() => {
     if (selectedComponent) {
       console.log("selected  component ", selectedComponent);
@@ -24,21 +27,12 @@ const RightSidebar = ({ isOpen, toggleSidebar, setRightSideBarOpen }) => {
       </button>
       <h2 className="text-xl font-bold mb-4">Right Sidebar</h2>
       {selectedComponent ? (
-        <div>
-          <p className="text-sm text-gray-300">
-            Editing: {selectedComponent.extraAttributes.label}
-          </p>
-          <label className="block mt-4">
-            Placeholder:
-            <input
-              type="text"
-              defaultValue={selectedComponent.attributes?.placeholder}
-              className="w-full p-2 bg-gray-800 border border-gray-600 rounded mt-1"
-            />
-          </label>
-          {/* Add more fields as needed */}
-        </div>
+        <>
+     {/* <h1>hii</h1> */}
+          <PropertyForms />
+        </>
       ) : (
+
         <p className="text-sm text-gray-400">Select a component to edit.</p>
       )}
       {/* <ul>
