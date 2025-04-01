@@ -1,40 +1,39 @@
 import React, { useEffect } from "react";
-import { MdOutlineTextFields } from "react-icons/md";
+import { MdShortText } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useCanvas from "../../hooks/useCanvas";
+
 export const extraAttributes = {
-  label: "Text field",
-  helperText: "Helper text",
+  label: "Input Field",
+  helperText: "Enter your text here",
   required: false,
-  placeHolder: "Value here... ",
-  
+  placeholder: "Type something...",
 };
-export const TextFieldFormElement = {
-  type: "textField",
+
+export const InputFormElement = {
+  type: "inputField",
   construct: (id) => ({
     id,
-    type: "textField",
+    type: "inputField",
     extraAttributes,
-
   }),
   designerComponent: () => DesignerComponent,
-
-
   propertiesComponent: () => PropertiesComponent,
   formComponent: () => (
     <>
-      <div>this is form component</div>
+      <div>This is a basic input field in the form</div>
     </>
   ),
   designerBtnElement: {
-    Icon: () => <MdOutlineTextFields className="h-8 w-8 text-blue-100" />,
-    label: "Text Field",
+    Icon: () => <MdShortText className="h-8 w-8 text-blue-100" />,
+    label: "Inpul Field",
   },
 };
 
-export function DesignerComponent({ elementInstance, innerRef, className }) {
-  const { label, required, placeHolder, helperText } = elementInstance.extraAttributes;
+function DesignerComponent({ elementInstance, innerRef, className }) {
+  const { label, required, placeholder, helperText } =
+    elementInstance.extraAttributes;
 
   return (
     <div
@@ -45,38 +44,43 @@ export function DesignerComponent({ elementInstance, innerRef, className }) {
         <label htmlFor={label} className="text-sm font-medium">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
-        <textarea
+        <input
+          type="text"
           readOnly
           disabled
-          placeholder={placeHolder}
-          className="w-full h-24 p-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700 text-left resize-none focus:ring-2 focus:ring-blue-500"
+          placeholder={placeholder}
+          className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700 focus:ring-2 focus:ring-blue-500"
         />
       </div>
-
       {helperText && <p className="text-gray-500 text-xs">{helperText}</p>}
     </div>
   );
 }
+
 export const PropertiesComponent = ({ elementInstance }) => {
   const { setComponents } = useCanvas();
   const { extraAttributes, id, type } = elementInstance;
+
   useEffect(() => {
-    console.log("elementInstance ", elementInstance);
+    console.log("InputFormElement Properties: ", elementInstance);
   }, [elementInstance]);
+
   const formik = useFormik({
     initialValues: extraAttributes,
     validationSchema: Yup.object({
       label: Yup.string().required("Label is required"),
-      placeHolder: Yup.string().required("Placeholder is required"),
+      placeholder: Yup.string().required("Placeholder is required"),
+      helperText: Yup.string(),
+      required: Yup.boolean(),
     }),
     onSubmit: (values) => {
-      console.log("Updated Attributes:", values);
+      console.log("Updated Input Attributes:", values);
       setComponents({
         operation: "update",
         updatedComponent: {
           id,
           type,
-          extraAttributes:{...values}, 
+          extraAttributes: { ...values },
         },
       });
     },
@@ -115,14 +119,14 @@ export const PropertiesComponent = ({ elementInstance }) => {
           Placeholder:
           <input
             type="text"
-            name="placeHolder"
-            value={formik.values.placeHolder}
+            name="placeholder"
+            value={formik.values.placeholder}
             onChange={formik.handleChange}
             className="w-full p-2 bg-gray-800 border border-gray-600 rounded mt-1"
           />
-          {formik.touched.placeHolder && formik.errors.placeHolder && (
+          {formik.touched.placeholder && formik.errors.placeholder && (
             <div className="text-red-500 text-sm">
-              {formik.errors.placeHolder}
+              {formik.errors.placeholder}
             </div>
           )}
         </label>
@@ -148,4 +152,4 @@ export const PropertiesComponent = ({ elementInstance }) => {
   );
 };
 
-// export default TextElement;
+export default InputFormElement;
