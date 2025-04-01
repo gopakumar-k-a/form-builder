@@ -26,7 +26,7 @@ const LeftSidebar = ({ isOpen, toggleSidebar }) => {
       </button>
       <h2 className="text-xl font-bold mb-4">Add Inputs</h2>
       {Object.values(formElements).map((el) => (
-        <DragableInput el={el} />
+        <DragableInput el={el} key={el.type} />
       ))}
 
       {/* {elements?.length &&
