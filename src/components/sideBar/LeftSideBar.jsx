@@ -1,6 +1,7 @@
 import React from "react";
 import DragableInput from "../DragableInput/DragableInput";
 import { TextFieldFormElement } from "../DragableElementConfig/TextFieldFormElement";
+import { formElements } from "../DragableElementConfig/FormElements";
 const LeftSidebar = ({ isOpen, toggleSidebar }) => {
   // const [elements, setElements] = useState([]);
 
@@ -24,7 +25,9 @@ const LeftSidebar = ({ isOpen, toggleSidebar }) => {
         &times;
       </button>
       <h2 className="text-xl font-bold mb-4">Add Inputs</h2>
-      <DragableInput el={TextFieldFormElement} />
+      {Object.values(formElements).map((el) => (
+        <DragableInput el={el} />
+      ))}
 
       {/* {elements?.length &&
         elements.map((el) => <DragableInput el={el} key={el.id} />)} */}
