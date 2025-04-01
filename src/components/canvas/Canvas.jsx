@@ -18,7 +18,8 @@ const Canvas = () => {
   // const { components, selectedComponent } = useSelector(
   //   (state) => state.canvas
   // );
-  const { components, selectedComponent,setComponents,setSelectedComponent}=useCanvas()
+  const { components, selectedComponent, setComponents, setSelectedComponent } =
+    useCanvas();
   const debounceTimeout = useRef(null);
   // const [showButtons, setShowButtons] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -27,15 +28,27 @@ const Canvas = () => {
       console.log(components, " components");
     }
   }, [components]);
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOverCanvas }, dropCanvas] = useDrop(() => ({
     accept: "FORM_ELEMENT",
-    drop: (item) => {
+    drop: (item, monitor) => {
+      const didChild = monitor.getDropResult();
+      if (didChild && didChild.handled) {
+        //if we have added a new element on top of existing canvas element no need to add the element again
+        return; // Child already handled the drop, do nothing
+      }
       addComponentToCanvas(item);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
+  // const [{ isOverElement }, dropElement] = useDrop({
+  //   accept: "FORM_ELEMENT",
+  //   drop: (item) => console.log("Dropped inside element"),
+  //   collect: (monitor) => ({
+  //     isOverElement: !!monitor.isOver(),
+  //   }),
+  // });
   const handleMouseEnter = (index) => {
     clearTimeout(debounceTimeout.current);
     setHoveredIndex(index);
@@ -49,30 +62,32 @@ const Canvas = () => {
   };
 
   const addComponentToCanvas = (item, index = null) => {
+    console.log("dragged item addComponentToCanvas index ", index);
+
     const newElement = item.construct(uniqueIdGenerator());
     console.log("new element ", newElement);
 
     // dispatch(
-      setComponents({
-        operation: "add",
-        item: newElement,
-        index, // Pass index for positioning
-      })
+    setComponents({
+      operation: "add",
+      item: newElement,
+      index, // Pass index for positioning
+    });
     // );
     handleMouseLeave();
   };
 
   const handleSelectComponent = (component) => {
     // dispatch(
-      setSelectedComponent({ operation: "add", item: { ...component } })
+    setSelectedComponent({ operation: "add", item: { ...component } });
     // );
   };
 
   const handleDeleteComponent = (component) => {
     // dispatch(
-      
-      setComponents({ operation: "remove", item: component })
-    
+
+    setComponents({ operation: "remove", item: component });
+
     // );
     handleMouseLeave();
   };
@@ -88,19 +103,29 @@ const Canvas = () => {
     // );
 
     // dispatch(
-      
-      setComponents({ operation: "swap", fromIndex, toIndex })
-    
+
+    setComponents({ operation: "swap", fromIndex, toIndex });
+
     // );
     handleMouseLeave();
   }, []);
+  const handleDrop = (event) => {
+    event.stopPropagation(); // Stop the child drop event from reaching here
+    event.preventDefault();
+  };
 
+  const handleDragOver = (event) => {
+    event.preventDefault(); // Necessary to allow dropping
+  };
   return (
     <div className="grid grid-cols-12 w-screen  justify-center absolute top-0 left-0 bg-gray-100 min-h-screen">
       <div className="bg-gray-900 col-span-12 md:col-span-2 h-screen hidden md:block"></div>
       <div
         className="bg-white col-span-12 md:col-span-8 min-h-screen p-6 border border-gray-300"
-        ref={drop}
+        ref={dropCanvas}
+        // onDrop={handleDrop}
+        // onDragOver={handleDragOver}
+        id="dropCanvas"
       >
         <CanvasHeader />
 
@@ -118,6 +143,7 @@ const Canvas = () => {
             //   moveComponent={moveComponent}
             // />
             <div
+              // ref={dropElement}
               key={component.id}
               className={`relative p-3 bg-white border rounded-md shadow-sm transition-all duration-200 cursor-pointer ${
                 selectedComponent?.id === component.id
@@ -126,6 +152,7 @@ const Canvas = () => {
               }`}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
+              // onDrop={handleDrop}
 
               // onClick={() => handleSelectComponent(component)}
             >
@@ -135,11 +162,14 @@ const Canvas = () => {
               </h1> */}
               {/* <span className="text-2xl mr-2">{component.icon || "❓"}</span> */}
               {/* {RenderComponent(component)} */}
+              {/* <div ref={dropElement} key={component.id} className="canvas-item"> */}
               <DesignerElementWrapper
                 el={component}
                 index={index}
                 moveItem={moveItem}
+                addComponentToCanvas={addComponentToCanvas}
               />
+              {/* </div> */}
               {/* <div
                 className="absolute top-1 right-1 bg-red-500 flex gap-2"
                 onClick={(e) => e.stopPropagation()} // Prevent click from propagating
@@ -189,26 +219,34 @@ function DesignerElementWrapper({
   el,
   index,
   moveItem,
+  addComponentToCanvas,
   // onMouseEnter,
   // onMouseLeave,
 }) {
   // const { DesignerComponent } = formElements[el.type];
   const DesignerComponent = formElements[el.type].designerComponent();
 
-
   const ITEM_TYPE = "CANVAS_ITEM";
+  const FORM_ELEMENT_TYPE = "FORM_ELEMENT";
   const [{ isDragging }, ref] = useDrag({
     type: ITEM_TYPE,
     item: { index },
   });
 
   const [{ isOver }, drop] = useDrop({
-    accept: ITEM_TYPE,
+    accept: [ITEM_TYPE, FORM_ELEMENT_TYPE],
     drop: (draggedItem) => {
-      if (draggedItem.index !== index) {
+      if (draggedItem?.index && draggedItem.index !== index) {
+        //if there is index it means we are swapping added canvas elements
+        console.log("dragged item if", draggedItem);
         moveItem(draggedItem.index, index);
-        draggedItem.index = index; // Update index after moving
+        // draggedItem.index = index; // Update index after moving
+      } else {
+        console.log("dragged item else index", draggedItem, "-> ", index);
+        //if there is no index it means we are adding a new element on top of existing canvas element
+        addComponentToCanvas(draggedItem, index);
       }
+      return { handled: true };
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -230,11 +268,13 @@ function DesignerElementWrapper({
   return (
     <>
       {/* <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}> */}
-      <DesignerComponent
-        innerRef={(node) => ref(drop(node))}
-        elementInstance={el}
-        className={computedClass}
-      />
+      <div className="border-red-800">
+        <DesignerComponent
+          innerRef={(node) => ref(drop(node))}
+          elementInstance={el}
+          className={computedClass}
+        />
+      </div>
       {/* </div> */}
     </>
   );

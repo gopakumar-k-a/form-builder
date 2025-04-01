@@ -8,6 +8,7 @@ export const extraAttributes = {
   helperText: "Helper text",
   required: false,
   placeHolder: "Value here... ",
+  
 };
 export const TextFieldFormElement = {
   type: "textField",
@@ -15,6 +16,7 @@ export const TextFieldFormElement = {
     id,
     type: "textField",
     extraAttributes,
+
   }),
   designerComponent: () => DesignerComponent,
 

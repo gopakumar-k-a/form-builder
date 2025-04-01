@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   components: [],
   selectedComponent: null,
+  
 };
 
 const canvasSlice = createSlice({
@@ -13,9 +14,12 @@ const canvasSlice = createSlice({
       const { item, operation, index } = action.payload;
       switch (operation) {
         case "add": {
+          console.log('canvasSlice -> add index',index);
+          
           const newComponents = [...state.components];
 
           if (index !== null && index >= 0 && index < newComponents.length) {
+            console.log('canvasSlice -> add');
             // Insert at a specific index
             newComponents.splice(index, 0, item);
           } else {
