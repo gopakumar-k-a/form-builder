@@ -1,12 +1,21 @@
 import { FaCirclePlus } from "react-icons/fa6";
 import React from "react";
 import { FiSave } from "react-icons/fi";
-const LeftSideBarButton = ({onClick}) => {
+import useFormHandle from "../../../hooks/useFormHandler";
+const LeftSideBarButton = () => {
+  const { isLeftSideBarOpen, setLeftSideBarOpen } = useFormHandle();
+  const handleLeftSideBarOpen = () => {
+
+    setLeftSideBarOpen(!isLeftSideBarOpen);
+  };
   return (
     <div>
-      <button onClick={onClick} className="flex justify-center absolute top-10 left-10 gap-2 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">
+      <button
+        onClick={handleLeftSideBarOpen}
+        className="flex justify-center absolute top-10 left-10 gap-2 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+      >
         <FaCirclePlus size={20} />
-        <span>  Insert</span>
+        <span> Insert</span>
       </button>
     </div>
     // <div className="flex items-center space-x-4">
