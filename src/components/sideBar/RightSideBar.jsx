@@ -1,33 +1,38 @@
 import React, { useEffect, useState } from "react";
 import PropertyForms from "../forms/PropertyForms";
 import useCanvas from "../../hooks/useCanvas";
+import useFormHandle from "../../hooks/useFormHandler";
 
-const RightSidebar = ({ isOpen, toggleSidebar, setRightSideBarOpen }) => {
+const RightSidebar = () => {
   const { selectedComponent } = useCanvas();
+  const { setRightSideBarOpen, isRightSideBarOpen } = useFormHandle();
   const [activeTab, setActiveTab] = useState("properties");
-
   useEffect(() => {
     if (selectedComponent) {
-     // console.log("selected component ", selectedComponent);
+      // console.log("selected component ", selectedComponent);
       //setRightSideBarOpen(true); // Open sidebar when a component is selected
     } else {
       setActiveTab("properties"); // Reset tab if no component is selected
     }
   }, [selectedComponent, setRightSideBarOpen]);
 
-  const [sdf,dsf]=useState('properies')
+  // const [sdf, dsf] = useState("properies");
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
+  };
+
+  const toggleRightSideBar = () => {
+    setRightSideBarOpen(!isRightSideBarOpen);
   };
 
   return (
     <div
       className={`fixed top-0 right-0 h-full w-72 bg-gray-900 text-white p-4 transition-transform transform ${
-        isOpen ? "translate-x-0" : "translate-x-full"
+        isRightSideBarOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
       <button
-        onClick={toggleSidebar}
+        onClick={toggleRightSideBar}
         className="absolute top-4 left-4 text-white text-xl focus:outline-none"
       >
         &times;
