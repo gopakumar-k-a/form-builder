@@ -13,7 +13,7 @@ import { uniqueIdGenerator } from "../../lib/uniqueIdGenerator";
 import DraggableComponent from "./DraggableComponent";
 import CanvasHeader from "./CanvasHeader";
 import useCanvas from "../../hooks/useCanvas";
-const Canvas = () => {
+const Canvas = ({isLeftOpen,isRightOpen}) => {
   // const dispatch = useDispatch();
   // const { components, selectedComponent } = useSelector(
   //   (state) => state.canvas
@@ -26,6 +26,9 @@ const Canvas = () => {
   useEffect(() => {
     if (components && components?.length) {
       console.log(components, " components");
+      console.log(isRightOpen+" isRightOpen")  
+      console.log(isLeftOpen+" isLeftOpen")
+    
     }
   }, [components]);
   const [{ isOverCanvas }, dropCanvas] = useDrop(() => ({
@@ -110,11 +113,32 @@ const Canvas = () => {
     handleMouseLeave();
   }, []);
 
+<<<<<<< HEAD
+=======
+  const handleDragOver = (event) => {
+    event.preventDefault(); // Necessary to allow dropping
+  };
+  function calculateCanvasLength() {
+    if (isLeftOpen && isRightOpen) {
+      return "col-span-12 md:col-span-8";
+    } else if (isLeftOpen || isRightOpen) {
+      return "col-span-12 md:col-span-10";
+    } else {
+      return "col-span-12";
+    }
+  }
+  
+>>>>>>> 593256ef82fcc020f8320553115510d283b43fb8
   return (
     <div className="grid grid-cols-12 w-screen  justify-center absolute top-0 left-0 bg-gray-100 min-h-screen">
-      <div className="bg-gray-900 col-span-12 md:col-span-2 h-screen hidden md:block"></div>
+      {isLeftOpen &&
+            <div className="bg-gray-900 col-span-12 md:col-span-2 h-screen hidden md:block"></div>
+}
       <div
-        className="bg-white col-span-12 md:col-span-8 min-h-screen p-6 border border-gray-300"
+        className={`bg-white ${
+          calculateCanvasLength()
+        } min-h-screen p-6 border border-gray-300`}
+
         ref={dropCanvas}
         // onDrop={handleDrop}
         // onDragOver={handleDragOver}
@@ -202,8 +226,8 @@ const Canvas = () => {
           </pre>
         )}
       </div>
-
-      <div className="bg-gray-900 col-span-12 md:col-span-2 h-screen hidden md:block"></div>
+{/* {!isRightOpen &&<div className="bg-gray-900 col-span-12 md:col-span-2 h-screen hidden md:block"></div>
+} */}
     </div>
   );
 };

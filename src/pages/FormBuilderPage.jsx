@@ -5,7 +5,7 @@ import LeftSidebar from "../components/sideBar/LeftSideBar";
 import RightSidebar from "../components/sideBar/RightSideBar";
 import Canvas from "../components/canvas/Canvas";
 // import { useSelector, useDispatch } from "react-redux";
-// import { setSelectedComponent } from "../redux/reducers/canvas/canvasReducer";
+//import { setSelectedComponent } from "../redux/reducers/canvas/canvasReducer";
 import useCanvas from "../hooks/useCanvas";
 
 function FormBuilderPage() {
@@ -19,26 +19,33 @@ function FormBuilderPage() {
   };
   const handleRightSideBarToggle = () => {
     setRightSideBarOpen((prev) => !prev);
-setSelectedComponent({ operation: "remove" })
+    setSelectedComponent({ operation: "remove" })
+    console.log("isRightSideBarOpen - ", isRightSideBarOpen);
   };
   useEffect(() => {
     selectedComponent ? setRightSideBarOpen(true) : setRightSideBarOpen(false);
+
   }, [selectedComponent]);
+  useEffect(() => {
+
+    console.log("isRightSideBarOpen  inside useeffct ", isRightSideBarOpen);
+
+  },[isRightSideBarOpen])
   return (
     <>
     
-      <Canvas />
+      <Canvas isLeftOpen={isLeftSideBarOpen} isRightOpen={setRightSideBarOpen} />
       <LeftSidebar
         isOpen={isLeftSideBarOpen}
         toggleSidebar={() => handleLeftSideBarToggle()}
       />
-
+      {isRightSideBarOpen && (
       <RightSidebar
         isOpen={isRightSideBarOpen}
         toggleSidebar={() => handleRightSideBarToggle()}
         setRightSideBarOpen={setRightSideBarOpen}
       />
-
+      )}
       {!isLeftSideBarOpen && (
         <>
           <LeftSideBarButton onClick={handleLeftSideBarToggle} />
