@@ -14,11 +14,11 @@ function DragableInput({ el }) {
       <div
         key={`designer-button-${el.type}`}
         ref={drag}
-        className={`p-3 flex items-center ${
+        className={`p-2 flex items-center ${
           isDragging ? "border-2 border-dotted" : ""
         }  bg-gray-800 mb-2 rounded-md cursor-pointer`}
       >
-        <span className="text-2xl mr-2">{label}</span>
+        <span className="text-sm mr-2">{label}</span>
         <Icon className="h-8 w-8 text-blue-100" />
       </div>
       {/* <div
