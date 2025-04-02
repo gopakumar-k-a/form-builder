@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import { useSelector } from "react-redux";
 import PropertyForms from "../forms/PropertyForms";
 // import { RxCross2 } from "react-icons/rx";
@@ -13,6 +13,8 @@ const RightSidebar = ({ isOpen, toggleSidebar, setRightSideBarOpen }) => {
       setRightSideBarOpen(true); // Open sidebar when a component is selected
     }
   }, [selectedComponent, setRightSideBarOpen]);
+
+  const [sdf,dsf]=useState('properies')
   return (
     <div
       className={`fixed top-0 right-0 h-full w-64 bg-gray-900 text-white p-4 transition-transform transform ${

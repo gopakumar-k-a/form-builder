@@ -109,14 +109,7 @@ const Canvas = () => {
     // );
     handleMouseLeave();
   }, []);
-  const handleDrop = (event) => {
-    event.stopPropagation(); // Stop the child drop event from reaching here
-    event.preventDefault();
-  };
 
-  const handleDragOver = (event) => {
-    event.preventDefault(); // Necessary to allow dropping
-  };
   return (
     <div className="grid grid-cols-12 w-screen  justify-center absolute top-0 left-0 bg-gray-100 min-h-screen">
       <div className="bg-gray-900 col-span-12 md:col-span-2 h-screen hidden md:block"></div>

@@ -5,8 +5,9 @@ import LeftSidebar from "../components/sideBar/LeftSideBar";
 import RightSidebar from "../components/sideBar/RightSideBar";
 import Canvas from "../components/canvas/Canvas";
 // import { useSelector, useDispatch } from "react-redux";
-import { setSelectedComponent } from "../redux/reducers/canvas/canvasReducer";
+// import { setSelectedComponent } from "../redux/reducers/canvas/canvasReducer";
 import useCanvas from "../hooks/useCanvas";
+
 function FormBuilderPage() {
   // const dispatch = useDispatch();
   const {setSelectedComponent,selectedComponent}=useCanvas()
