@@ -14,8 +14,9 @@ import DraggableComponent from "./DraggableComponent";
 import CanvasHeader from "./CanvasHeader";
 import useCanvas from "../../hooks/useCanvas";
 import useFormHandle from "../../hooks/useFormHandler";
+// import { generateJSXCode } from "../../lib/generateJsx";
 const Canvas = () => {
-  const {isLeftSideBarOpen,isRightSideBarOpen}=useFormHandle()
+  const { isLeftSideBarOpen, isRightSideBarOpen } = useFormHandle();
 
   // const dispatch = useDispatch();
   // const { components, selectedComponent } = useSelector(
@@ -28,10 +29,9 @@ const Canvas = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   useEffect(() => {
     if (components && components?.length) {
-      console.log(components, " components");
-      console.log(isRightSideBarOpen+" isRightSideBarOpen")  
-      console.log(isLeftSideBarOpen+" isLeftSideBarOpen")
-    
+      // Example Usage
+      // const generatedComponents  = generateJSXCode(components);
+      // console.log("Generated Form JSON:", JSON.stringify(generatedComponents , null, 2));
     }
   }, [components]);
   const [{ isOverCanvas }, dropCanvas] = useDrop(() => ({
@@ -48,6 +48,7 @@ const Canvas = () => {
       isOver: !!monitor.isOver(),
     }),
   }));
+
   // const [{ isOverElement }, dropElement] = useDrop({
   //   accept: "FORM_ELEMENT",
   //   drop: (item) => console.log("Dropped inside element"),
@@ -128,17 +129,14 @@ const Canvas = () => {
       return "col-span-12";
     }
   }
-  
+
   return (
     <div className="grid grid-cols-12 w-screen  justify-center absolute top-0 left-0 bg-gray-100 min-h-screen">
-      {isLeftSideBarOpen &&
-            <div className="bg-gray-900 col-span-12 md:col-span-2 h-screen hidden md:block"></div>
-}
+      {isLeftSideBarOpen && (
+        <div className="bg-gray-900 col-span-12 md:col-span-2 h-screen hidden md:block"></div>
+      )}
       <div
-        className={`bg-white ${
-          calculateCanvasLength()
-        } min-h-screen p-6 border border-gray-300`}
-
+        className={`bg-white ${calculateCanvasLength()} min-h-screen p-6 border border-gray-300`}
         ref={dropCanvas}
         // onDrop={handleDrop}
         // onDragOver={handleDragOver}
@@ -226,7 +224,7 @@ const Canvas = () => {
           </pre>
         )}
       </div>
-{/* {!isRightSideBarOpen &&<div className="bg-gray-900 col-span-12 md:col-span-2 h-screen hidden md:block"></div>
+      {/* {!isRightSideBarOpen &&<div className="bg-gray-900 col-span-12 md:col-span-2 h-screen hidden md:block"></div>
 } */}
     </div>
   );
