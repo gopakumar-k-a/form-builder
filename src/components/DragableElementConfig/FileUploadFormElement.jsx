@@ -19,12 +19,7 @@ export const FileUploadFormElement = {
   }),
   designerComponent: () => DesignerComponent,
   propertiesComponent: () => PropertiesComponent,
-  formComponent: () => (
-    <>
-      <div>This is a file upload component in the form</div>
-      {/* You would render the actual <input type="file"> element here */}
-    </>
-  ),
+  formComponent: () => FormComponent,
   designerBtnElement: {
     Icon: () => <MdFileUpload className="h-8 w-8 text-blue-100" />,
     label: "File Upload",
@@ -32,6 +27,8 @@ export const FileUploadFormElement = {
 };
 
 function DesignerComponent({ elementInstance, innerRef, className }) {
+  console.log('extra attributes ',elementInstance.extraAttributes);
+  
   const { label, required, accept } = elementInstance.extraAttributes;
 
   return (
@@ -143,5 +140,51 @@ export const PropertiesComponent = ({ elementInstance }) => {
     </div>
   );
 };
+
+function FormComponent({ elementInstance, className }) {
+  console.log("extra attributes ", elementInstance.extraAttributes);
+
+  const { label, required, accept } = elementInstance.extraAttributes;
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  return (
+    <div
+
+      className={`flex flex-col gap-2 w-full text-black p-3 border rounded-md transition-all ${className}`}
+    >
+      <label htmlFor={`file-upload-${elementInstance.id}`} className="text-sm font-medium">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      
+      {/* Hidden File Input */}
+      <input
+        id={`file-upload-${elementInstance.id}`}
+        type="file"
+        className="hidden"
+        accept={accept ? accept.split(",").map(type => `.${type}`).join(",") : "*"}
+        onChange={handleFileChange}
+      />
+
+      {/* Custom File Upload UI */}
+      <div
+        className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700 flex items-center justify-between cursor-pointer"
+        onClick={() => document.getElementById(`file-upload-${elementInstance.id}`).click()}
+      >
+        <span>{selectedFile ? selectedFile.name : "Upload File"}</span>
+        <MdFileUpload className="text-gray-500" />
+      </div>
+
+      {/* Accepted File Types Info */}
+      {accept && <p className="text-gray-500 text-xs">Accepts: {accept}</p>}
+    </div>
+  );
+}
 
 export default FileUploadFormElement;

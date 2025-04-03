@@ -20,11 +20,7 @@ export const InputFormElement = {
   }),
   designerComponent: () => DesignerComponent,
   propertiesComponent: () => PropertiesComponent,
-  formComponent: () => (
-    <>
-      <div>This is a basic input field in the form</div>
-    </>
-  ),
+  formComponent: () => FormComponent,
   designerBtnElement: {
     Icon: () => <MdShortText className="h-8 w-8 text-blue-100" />,
     label: "Inpul Field",
@@ -151,5 +147,29 @@ export const PropertiesComponent = ({ elementInstance }) => {
     </div>
   );
 };
+
+function FormComponent({ elementInstance, className }) {
+  const { label, required, placeholder, helperText } =
+    elementInstance.extraAttributes;
+  return (
+    <>
+      <div
+        className={`flex flex-col gap-2 w-full text-black p-3 border rounded-md transition-all ${className}`}
+      >
+        <div className="relative">
+          <label htmlFor={label} className="text-sm font-medium">
+            {label} {required && <span className="text-red-500">*</span>}
+          </label>
+          <input
+            type="text"
+            placeholder={placeholder}
+            className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700 focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        {helperText && <p className="text-gray-500 text-xs">{helperText}</p>}
+      </div>
+    </>
+  );
+}
 
 export default InputFormElement;
