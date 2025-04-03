@@ -14,6 +14,7 @@ import DraggableComponent from "./DraggableComponent";
 import CanvasHeader from "./CanvasHeader";
 import useCanvas from "../../hooks/useCanvas";
 import useFormHandle from "../../hooks/useFormHandler";
+import { generateHTMLStringsForBackend } from "../../lib/generateJsx";
 // import { generateJSXCode } from "../../lib/generateJsx";
 const Canvas = () => {
   const { isLeftSideBarOpen, isRightSideBarOpen } = useFormHandle();
@@ -29,6 +30,9 @@ const Canvas = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   useEffect(() => {
     if (components && components?.length) {
+      const generatedComponents = generateHTMLStringsForBackend(components);
+      console.log('generatedComponents generateHTMLStringsForBackend',generatedComponents);
+      
       // Example Usage
       // const generatedComponents  = generateJSXCode(components);
       // console.log("Generated Form JSON:", JSON.stringify(generatedComponents , null, 2));
