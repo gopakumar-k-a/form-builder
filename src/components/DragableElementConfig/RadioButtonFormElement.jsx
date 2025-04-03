@@ -5,7 +5,10 @@ import * as Yup from "yup";
 import useCanvas from "../../hooks/useCanvas";
 export const extraAttributes = {
   label: "Radio Group",
-  options: [{ id: 1, value: "Option 1" }, { id: 2, value: "Option 2" }],
+  options: [
+    { id: 1, value: "Option 1" },
+    { id: 2, value: "Option 2" },
+  ],
   required: false,
 };
 
@@ -18,11 +21,7 @@ export const RadioButtonFormElement = {
   }),
   designerComponent: () => DesignerComponent,
   propertiesComponent: () => PropertiesComponent,
-  formComponent: () => (
-    <>
-      <div>This is a radio button group in the form</div>
-    </>
-  ),
+  formComponent: () => FormComponent,
   designerBtnElement: {
     Icon: () => <MdRadioButtonChecked className="h-8 w-8 text-blue-100" />,
     label: "Radio Buttons",
@@ -41,10 +40,32 @@ function DesignerComponent({ elementInstance, innerRef, className }) {
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <div className="flex flex-col gap-1">
-        {options.map((option) => (
+        {/* {options.map((option) => (
           <div key={option.id} className="flex items-center">
             <MdRadioButtonUnchecked className="mr-2" />
             <span>{option.value}</span>
+          </div>
+        ))} */}
+        {options.map((option) => (
+          <div
+            key={option.id}
+            className={`flex items-center ${
+              option.disabled ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            <input
+              type="radio"
+              className="mr-2"
+              value={option.id}
+              disabled={true}
+            />
+            <label
+              className={`${
+                option.disabled ? "cursor-not-allowed" : "cursor-default"
+              }`}
+            >
+              <span>{option.value}</span>
+            </label>
           </div>
         ))}
         {options.length === 0 && (
@@ -93,7 +114,10 @@ export const PropertiesComponent = ({ elementInstance }) => {
 
   const handleAddOption = () => {
     if (newOptionValue.trim()) {
-      setOptions([...options, { id: Date.now(), value: newOptionValue.trim() }]);
+      setOptions([
+        ...options,
+        { id: Date.now(), value: newOptionValue.trim() },
+      ]);
       setNewOptionValue("");
     }
   };
@@ -183,5 +207,56 @@ export const PropertiesComponent = ({ elementInstance }) => {
     </div>
   );
 };
+
+function FormComponent({ elementInstance, className }) {
+  const { label, options, required } = elementInstance.extraAttributes;
+console.log('options are ',options);
+const [selectedOption, setSelectedOption] = useState(null);
+  return (
+    <div
+      className={`flex flex-col gap-2 w-full text-black p-3 border rounded-md transition-all ${className}`}
+    >
+      <label htmlFor={label} className="text-sm font-medium">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      <div className="flex flex-col gap-1">
+        {/* {options.map((option) => (
+          <div key={option.id} className="flex items-center">
+            <MdRadioButtonUnchecked className="mr-2" />
+            <span>{option.value}</span>
+          </div>
+        ))} */}
+ {options.map((option) => (
+        <div
+          key={option.id}
+          className={`flex items-center ${
+            option.disabled ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+        >
+          <input
+            type="radio"
+            name="options"
+            className="mr-2"
+            value={option.id}
+            checked={selectedOption === option.id}
+            onChange={() => setSelectedOption(option.id)}
+            disabled={option.disabled}
+          />
+          <label
+            className={`${
+              option.disabled ? "cursor-not-allowed" : "cursor-default"
+            }`}
+          >
+            <span>{option.value}</span>
+          </label>
+        </div>
+      ))}
+        {options.length === 0 && (
+          <span className="text-gray-500 text-xs">No options added</span>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default RadioButtonFormElement;

@@ -17,7 +17,7 @@ const useFormHandle = () => {
 
   const handleLeftSideBarOpen = (value) => {
     //value must be true or false
-console.log(' handleLeftSideBarOpen value ',value);
+    console.log(" handleLeftSideBarOpen value ", value);
 
     dispatch(setLeftSideBarOpen(value));
   };

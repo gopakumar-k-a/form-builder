@@ -6,7 +6,10 @@ import useCanvas from "../../hooks/useCanvas";
 
 export const extraAttributes = {
   label: "Dropdown Select",
-  options: [{ id: 1, value: "Option 1" }, { id: 2, value: "Option 2" }],
+  options: [
+    { id: 1, value: "Option 1" },
+    { id: 2, value: "Option 2" },
+  ],
   required: false,
 };
 
@@ -19,11 +22,7 @@ export const SelectDropdownFormElement = {
   }),
   designerComponent: () => DesignerComponent,
   propertiesComponent: () => PropertiesComponent,
-  formComponent: () => (
-    <>
-      <div>This is a dropdown select in the form</div>
-    </>
-  ),
+  formComponent: () => FormComponent,
   designerBtnElement: {
     Icon: () => <MdArrowDropDown className="h-8 w-8 text-blue-100" />,
     label: "Dropdown Select",
@@ -78,10 +77,16 @@ export const PropertiesComponent = ({ elementInstance }) => {
     },
     validationSchema: Yup.object({
       label: Yup.string().required("Label is required"),
-      options: Yup.array().min(1, "Please add at least one option to the dropdown."),
+      options: Yup.array().min(
+        1,
+        "Please add at least one option to the dropdown."
+      ),
     }),
     onSubmit: (values) => {
-      console.log("Updated Dropdown Select Attributes:", { ...values, options });
+      console.log("Updated Dropdown Select Attributes:", {
+        ...values,
+        options,
+      });
       setComponents({
         operation: "update",
         updatedComponent: {
@@ -98,10 +103,12 @@ export const PropertiesComponent = ({ elementInstance }) => {
     },
   });
 
-
   const handleAddOption = () => {
     if (newOptionValue.trim()) {
-      setOptions([...options, { id: Date.now(), value: newOptionValue.trim() }]);
+      setOptions([
+        ...options,
+        { id: Date.now(), value: newOptionValue.trim() },
+      ]);
       setNewOptionValue("");
     }
   };
@@ -118,7 +125,6 @@ export const PropertiesComponent = ({ elementInstance }) => {
   useEffect(() => {
     formik.setValues({ ...formik.values, options: options });
   }, [options, formik.setValues]);
-
 
   return (
     <div className="p-4 max-w-md mx-auto bg-gray-900 text-white rounded-lg">
@@ -157,7 +163,7 @@ export const PropertiesComponent = ({ elementInstance }) => {
               </button>
             </div>
           ))}
-           {formik.touched.options && formik.errors.options && (
+          {formik.touched.options && formik.errors.options && (
             <div className="text-red-500 text-sm">{formik.errors.options}</div>
           )}
           <div className="flex items-center gap-2">
@@ -198,5 +204,34 @@ export const PropertiesComponent = ({ elementInstance }) => {
     </div>
   );
 };
+function FormComponent({ elementInstance, className }) {
+  const { label, options, required } = elementInstance.extraAttributes;
+
+  return (
+    <div
+      className={`flex flex-col gap-2 w-full text-black p-3 border rounded-md transition-all ${className}`}
+    >
+      <label htmlFor={label} className="text-sm font-medium">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      <div className="relative">
+        <select
+          
+          className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700 appearance-none focus:ring-2 focus:ring-blue-500"
+        >
+          {options.map((option) => (
+            <option key={option.id} value={option.value}>
+              {option.value}
+            </option>
+          ))}
+          {options.length === 0 && <option>No options</option>}
+        </select>
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <MdArrowDropDown className="h-5 w-5" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default SelectDropdownFormElement;
