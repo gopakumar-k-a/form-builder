@@ -29,30 +29,29 @@ export const DatePickerFormElement = {
   },
 };
 
-
 function DesignerComponent({ elementInstance, innerRef, className }) {
-    console.log("extra attributes are ", elementInstance.extraAttributes);
-  
-    const { label, required, helperText } = elementInstance.extraAttributes;
-    
-    // Convert ISO date strings to JavaScript Date objects
-    // const minDateValue = minDate ? new Date(minDate) : null;
-    // const maxDateValue = maxDate ? new Date(maxDate) : null;
-  
-    // const [selectedDate, setSelectedDate] = useState(null);
-  
-    return (
-      <div
-        ref={innerRef}
-        className={`flex flex-col gap-2 w-full text-black p-3 border rounded-md transition-all ${className}`}
-      >
-        <label htmlFor="date-picker" className="text-sm font-medium">
-          {label} {required && <span className="text-red-500">*</span>}
-        </label>
-  
-        {/* Date Picker */}
-        <div className="relative w-full">
-          <DatePicker
+  console.log("extra attributes are ", elementInstance.extraAttributes);
+
+  const { label, required, helperText } = elementInstance.extraAttributes;
+
+  // Convert ISO date strings to JavaScript Date objects
+  // const minDateValue = minDate ? new Date(minDate) : null;
+  // const maxDateValue = maxDate ? new Date(maxDate) : null;
+
+  // const [selectedDate, setSelectedDate] = useState(null);
+
+  return (
+    <div
+      ref={innerRef}
+      className={`flex flex-col gap-2 w-full text-black p-3 border rounded-md transition-all ${className}`}
+    >
+      <label htmlFor="date-picker" className="text-sm font-medium">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+
+      {/* Date Picker */}
+      <div className="relative w-full">
+        {/* <DatePicker
             id="date-picker"
             // selected={selectedDate}
             // onChange={(date) => setSelectedDate(date)}
@@ -61,15 +60,26 @@ function DesignerComponent({ elementInstance, innerRef, className }) {
             disabled 
             className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700"
             placeholderText="Select Date"
-          />
-          <BsCalendarDate className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-        </div>
-  
-        {/* Helper Text */}
-        {helperText && <p className="text-gray-500 text-xs">{helperText}</p>}
+          /> */}
+        <input
+          type="date"
+          id="date-picker"
+          // selected={selectedDate}
+          // onChange={(date) => setSelectedDate(date)}
+          // minDate={minDateValue}
+          // maxDate={maxDateValue}
+          disabled
+          className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700"
+          placeholderText="Select Date"
+        />
+        <BsCalendarDate className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
       </div>
-    );
-  }
+
+      {/* Helper Text */}
+      {helperText && <p className="text-gray-500 text-xs">{helperText}</p>}
+    </div>
+  );
+}
 
 export const PropertiesComponent = ({ elementInstance }) => {
   const { setComponents } = useCanvas();
@@ -184,8 +194,6 @@ export const PropertiesComponent = ({ elementInstance }) => {
   );
 };
 
-
-
 function FormComponent({ elementInstance, className }) {
   console.log("extra attributes are ", elementInstance.extraAttributes);
 
@@ -208,7 +216,8 @@ function FormComponent({ elementInstance, className }) {
 
       {/* Date Picker */}
       <div className="relative w-full">
-        <DatePicker
+        <input
+          type="date"
           id="date-picker"
           selected={selectedDate}
           onChange={(date) => setSelectedDate(date)}
@@ -217,6 +226,15 @@ function FormComponent({ elementInstance, className }) {
           className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700"
           placeholderText="Select Date"
         />
+        {/* <DatePicker
+          id="date-picker"
+          selected={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+          minDate={minDateValue}
+          maxDate={maxDateValue}
+          className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 text-gray-700"
+          placeholderText="Select Date"
+        /> */}
         <BsCalendarDate className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
       </div>
 
